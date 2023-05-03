@@ -27,7 +27,7 @@ const Meet = () => {
         console.log("====================================");
 
         huddleIframeApp.on(HuddleAppEvent.ME_LEFT, (data) =>
-            console.log("f yeah", { iframeData: data })
+            console.log("meeting ended", { iframeData: data })
         );
     }, [address]);
 
@@ -36,7 +36,7 @@ const Meet = () => {
             <HuddleIframe config={iframeConfig} />
             <button
                 onClick={() => {
-                    console.log("Hi biatch");
+                    console.log("Connecting Wallet");
                     huddleIframeApp.methods.connectWallet(address);
                 }}
             >
