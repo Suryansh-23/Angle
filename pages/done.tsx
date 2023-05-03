@@ -16,7 +16,7 @@ const Done = () => {
             <div className="glass rounded-lg shadow-md p-6">
                 <div className="flex flex-col text-center w-auto">
                     <h1 className="mx-auto max-w-max font-display text-4xl mt-2 font-bold tracking-normal text-gray-200 sm:text-6xl">
-                        Chill Room
+                        Chill Out
                     </h1>
                     <h2 className="mx-auto mt-5 max-w-xl text-lg sm:text-gray-400  text-gray-500 leading-7">
                         <p className="mx-3 my-2">
@@ -41,7 +41,7 @@ const Done = () => {
                             href="/lobby"
                         >
                             <ArrowUturnLeftIcon className="h-6 w-6 mr-1" />
-                            Back again{" "}
+                            Find smth New{" "}
                         </Link>
                     </div>
                 </div>
