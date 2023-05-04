@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FadingList = ({ items: Array<string> }) => {
+const FadingList = ({ items }: { items: Array<string> }) => {
     const [visibleIndex, setVisibleIndex] = useState(0);
 
     useEffect(() => {

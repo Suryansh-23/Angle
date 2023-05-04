@@ -35,7 +35,7 @@ const Home: NextPage = () => {
                     for everyone
                 </h1>
                 <h2 className="mx-auto mt-12 max-w-xl text-lg sm:text-gray-400  text-gray-500 leading-7">
-                    Just hope in for a ride of fun. Meet new people and make new
+                    Just hop in for a ride of fun. Meet new people and make new
                     friends. All on web3.
                 </h2>
                 <Link
