@@ -57,7 +57,7 @@ const Home: NextPage = () => {
                                     height={400}
                                 />
                                 <h3 className="mt-2 font-medium text-lg">
-                                    Original Room
+                                    Huddle01
                                 </h3>
                             </div>
                             <div className="sm:mt-0 mt-8">
@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                                     className="w-full bg-gray-400 object-cover h-96 rounded-2xl sm:mt-0 mt-2"
                                 />
                                 <h3 className="mt-2 font-medium text-lg">
-                                    Generated Room
+                                    FEVM
                                 </h3>
                             </div>
                         </div>

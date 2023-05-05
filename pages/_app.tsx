@@ -8,12 +8,14 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
 import { useEffect, useState } from "react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { MoralisProvider } from "react-moralis";
+import { WagmiConfig, configureChains, createClient } from "wagmi";
 import {
     arbitrum,
     avalanche,
     bsc,
     fantom,
+    filecoinHyperspace,
     gnosis,
     mainnet,
     optimism,
@@ -36,6 +38,7 @@ const chains = [
     optimism,
     gnosis,
     fantom,
+    filecoinHyperspace,
 ];
 
 const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
@@ -68,10 +71,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <>
             {ready ? (
                 <WagmiConfig client={wagmiClient}>
-                    <Component {...pageProps} />
+                    <MoralisProvider initializeOnMount={false}>
+                        <Component {...pageProps} />
+                    </MoralisProvider>
                 </WagmiConfig>
             ) : null}
-
             <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
         </>
     );
