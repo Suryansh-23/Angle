@@ -11,6 +11,25 @@ module.exports = {
             type: "error",
         },
         {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: "string",
+                    name: "meetId",
+                    type: "string",
+                },
+                {
+                    indexed: false,
+                    internalType: "address",
+                    name: "userAddress",
+                    type: "address",
+                },
+            ],
+            name: "MeetWorked",
+            type: "event",
+        },
+        {
             inputs: [
                 {
                     internalType: "string",
@@ -144,18 +163,7 @@ module.exports = {
                 },
             ],
             name: "theMeetWork",
-            outputs: [
-                {
-                    internalType: "string",
-                    name: "",
-                    type: "string",
-                },
-                {
-                    internalType: "address",
-                    name: "",
-                    type: "address",
-                },
-            ],
+            outputs: [],
             stateMutability: "nonpayable",
             type: "function",
         },

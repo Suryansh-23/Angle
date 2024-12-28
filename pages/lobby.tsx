@@ -1,16 +1,41 @@
-import { HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import {
+    HomeIcon,
+    MagnifyingGlassIcon,
+    ArrowPathIcon,
+} from "@heroicons/react/24/solid";
 import { Web3Button, Web3NetworkSwitch } from "@web3modal/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useAccount } from "wagmi";
 import FadingList from "../components/FadingList";
 import { abi } from "../constants/angleABI";
-import { createRoom } from "@/components/helpers";
+
+const contractAddress = "0xD2236B144FfE781f38dD83653C284d88078A06C8";
+
+const createRoom = async () => {
+    const resp: any = await fetch(
+        "https://iriko.testing.huddle01.com/api/v1/create-iframe-room",
+        {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "x-api-key": process.env.NEXT_PUBLIC_HUDDLE_API_KEY || "",
+            },
+            body: JSON.stringify({
+                title: "Huddle-01-Room",
+                roomLocked: false,
+            }),
+        }
+    );
+    const result = await resp.json();
+    return result.data.roomId;
+};
 
 const Lobby = () => {
     const router = useRouter();
+    const [isLoading, setLoading] = useState(false);
     const { address } = useAccount();
     const { authenticate, enableWeb3, isWeb3Enabled } = useMoralis();
     // enableWeb3({ provider: "metamask" });
@@ -18,7 +43,7 @@ const Lobby = () => {
     // authenticate({ provider: "walletconnect" });
     const { runContractFunction: mapInterests } = useWeb3Contract({
         abi: abi,
-        contractAddress: "0xF6C6b7E999390827f4e9193f250EFadc4A07B165",
+        contractAddress: contractAddress,
         functionName: "mapInterests",
         params: {
             _address: address,
@@ -27,7 +52,7 @@ const Lobby = () => {
     });
     const { runContractFunction: theMeetWork } = useWeb3Contract({
         abi: abi,
-        contractAddress: "0xF6C6b7E999390827f4e9193f250EFadc4A07B165",
+        contractAddress: contractAddress,
         functionName: "theMeetWork",
         params: {
             _address: address,
@@ -41,12 +66,22 @@ const Lobby = () => {
         // anonymous async function
         if (isWeb3Enabled) {
             (async () => {
-                await setTimeout(() => {}, 2000);
+                setLoading(true);
 
-                console.log(isWeb3Enabled, await mapInterests());
+                let [retInter, result] = await Promise.all([
+                    await mapInterests(),
+                    (await theMeetWork()) as any,
+                ]);
+                console.log("mapInterests:", retInter);
 
-                const meetId = ((await theMeetWork()) as any)?.value
-                    ._hex as string;
+                const events = (await result.wait()).events;
+                console.log("result from theMeetWork: ", events);
+
+                if (events.length == 0) {
+                    return;
+                }
+
+                const meetId = events[0].args.meetId;
                 console.log(meetId, parseInt(meetId) === 0);
 
                 if (parseInt(meetId) == 0) {
@@ -58,8 +93,7 @@ const Lobby = () => {
                         await addMeetId({
                             params: {
                                 abi: abi,
-                                contractAddress:
-                                    "0xF6C6b7E999390827f4e9193f250EFadc4A07B165",
+                                contractAddress: contractAddress,
                                 functionName: "addMeetId",
                                 params: {
                                     _address: address,
@@ -68,13 +102,15 @@ const Lobby = () => {
                             },
                         })
                     );
+
+                    setLoading(false);
                     // redirect to meet
 
                     console.log("New Meet Id:", meetId);
                     router.push(`/meet?room=${meetId}`);
                 } else {
-                    // console.log(meetId);
-                    const meetId = await createRoom();
+                    console.log("Else Block: ", meetId);
+                    // const meetId = await createRoom();
                     router.push(`/meet?room=${meetId}`);
                 }
             })();
@@ -88,6 +124,7 @@ const Lobby = () => {
         enableWeb3,
         authenticate,
         isWeb3Enabled,
+        setLoading,
     ]);
 
     return (
@@ -130,8 +167,17 @@ const Lobby = () => {
                             await enableWeb3({ provider: "metamask" });
                         }}
                     >
-                        <MagnifyingGlassIcon className="h-6 w-6 mr-1" />
-                        Start finding someone
+                        {isLoading ? (
+                            <>
+                                <ArrowPathIcon className="h-6 w-6 mr-1 rotate" />
+                                Finding someone...
+                            </>
+                        ) : (
+                            <>
+                                <MagnifyingGlassIcon className="h-6 w-6 mr-1" />
+                                Start finding someone
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

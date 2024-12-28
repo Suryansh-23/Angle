@@ -26,13 +26,11 @@ const Meet = () => {
         console.log(huddleIframeApp);
         console.log("====================================");
 
-        huddleIframeApp.on(HuddleAppEvent.ME_LEFT, (data) =>
-            console.log("meeting ended", { iframeData: data })
-        );
-
-        huddleIframeApp.on(HuddleAppEvent.PEER_LEFT, (data) =>
-            console.log("peer left", { iframeData: data })
-        );
+        huddleIframeApp.on(HuddleAppEvent.ME_LEFT, (data) => {
+            console.log("====================================");
+            console.log("meet left", { data });
+            console.log("====================================");
+        });
     }, [address]);
 
     return (

@@ -5,10 +5,19 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SquigglyLines from "@/components/SquigglyLines";
-import { Testimonials } from "@/components/Testimonials";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+        console.log("====================================");
+        console.log(router);
+        console.log("====================================");
+    }, [router]);
+
     return (
         <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
             <Head>

@@ -21,6 +21,8 @@ contract angle {
 
     user[] public users;
 
+    event MeetWorked(string meetId, address userAddress);
+
     error NotOwner();
 
     constructor() {
@@ -39,7 +41,7 @@ contract angle {
         addressToInterests[_address] = _interests;
     }
 
-    function theMeetWork(address _address) public  returns(string memory, address){
+    function theMeetWork(address _address) public {
         
         //initially user1 is the address coming in
 
@@ -65,19 +67,24 @@ contract angle {
                         meetIdArray[k] = meetIdArray[k+1];
                      }
                      meetIdArray.pop();
-                     return (finalId, addressOfUser1);
+
+                     emit MeetWorked(finalId, addressOfUser1);
+                     return;
                 } 
             }
 
             //no one matches the interest, so just return randomly
             string memory finalMeetId = meetIdArray[meetIdArray.length-1];
             meetIdArray.pop();
-            return (finalMeetId, addressOfUser1);
+
+            emit MeetWorked(finalMeetId, addressOfUser1);
+            return;
             
 
         }else{
             //no meetId in the array, so first return false, add a meet ID to the meetIdArray.
-            return ("0", addressOfUser1);
+            emit MeetWorked("0", addressOfUser1);
+            return;
             //call addMeetId to the array
         }
     }
@@ -94,7 +101,7 @@ contract angle {
         uint256 _userRating,
         uint256 _numberOfMeetsDone,
         uint256 _hoursSpent
-    ) public  {
+    ) public {
 
         //first checking if already exists
         user memory userToBeChecked;
